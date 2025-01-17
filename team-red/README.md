@@ -1,16 +1,28 @@
 # AI and Digital Evidence Hackathon
 
+This is a spike to build out a proof of concept Chat Bot that uses the [Leiden Guidelines](https://leiden-guidelines.netlify.app/guidelines/) to provide guidance on Digitally Derived Evidence (DDE) used in international criminal courts and tribunals to prosecute perpetrators of international crime
+
+The chat bot is intended to provide different people with access to advice based on their role. 
+
+User interface: 
+
+![](./images/Screenshot%202025-01-17%20at%2011.22.58 AM.png)
+
+Note: the current chat bot hallucinates and has a significant issue with document retrieval which needs worked on to productionise the bot.
+
+## Vision
+
+![](./images/Screenshot%202025-01-17%20at%2011.41.35 AM.png)
+
+![](./images/Flow%20drop%20app%20slideshow%20(Community).jpg)
+
 ## Running
 
-Run the Jupyter Notebook 
-
-
-Vision
-
+Run the hackathon.ipynb Jupyter Notebook. 
 
 # Data Cleaning
 
-Work in progress PDF cleaning and markdown formatting.
+(Work in progress) PDF cleaning and markdown formatting.
 
 Run the pdf-processor.ipynb.
 

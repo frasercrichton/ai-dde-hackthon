@@ -20,6 +20,27 @@ Note: the current chat bot hallucinates and has a significant issue with documen
 
 Run the hackathon.ipynb Jupyter Notebook. 
 
+Pip Local Environment
+
+```
+python3 -m venv env
+
+source env/bin/activate
+```
+
+Check it:
+
+```
+which python
+
+python3 -m pip install -r requirements.txt
+```
+
+Deactivate
+```
+deactivate
+```
+
 # Data Cleaning
 
 (Work in progress) PDF cleaning and markdown formatting.

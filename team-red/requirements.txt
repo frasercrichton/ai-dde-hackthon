@@ -1,0 +1,11 @@
+# markitdown
+langchain 
+chromadb 
+spacy
+pdfplumber 
+pytest
+loguru
+# flash-attn 
+transformers 
+# triton
+# git+https://github.com/huggingface/transformers.git

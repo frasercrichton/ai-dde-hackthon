@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "leiden-guidelines-gpt"
+version = "0.1.0"
+description = "My Python project."
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+langchain = "^0.3.20"
+pdfplumber = "^0.11.5"
+loguru = "^0.7.3"
+
+[tool.poetry.dev-dependencies]
+ruff = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+
+[tool.ruff]
+lint.select = ["Q"]  
+line-length = 88 
+[lint.flake8-quotes]
+inline-quotes = "single"
+
+[tool.black]
+skip-string-normalization = true  # Prevents black from forcing double quotes
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

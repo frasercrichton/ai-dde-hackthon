@@ -3,7 +3,7 @@ import torch
 # pip install flash-attn transformers git+https://github.com/huggingface/transformers.git triton
 
 # TinyLlama/TinyLlama-1.1B
-MODEL = "meta-llama/Llama-3.1-8B"
+MODEL = 'meta-llama/Llama-3.1-8B'
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -16,7 +16,7 @@ class EmbeddingHandler:
     def tokenize(self, text):
         inputs = self.tokenizer(
                     text,
-                    return_tensors="pt",
+                    return_tensors='pt',
                     truncation=True
                 )
         # Use GPU if available

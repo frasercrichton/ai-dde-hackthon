@@ -1,11 +1,8 @@
 # markitdown
-langchain 
-chromadb 
+gradio
 spacy
-pdfplumber 
-pytest
-loguru
-# flash-attn 
-transformers 
-# triton
+flash-attn 
+# transformers 
+triton
+ipykernal
 # git+https://github.com/huggingface/transformers.git

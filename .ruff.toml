@@ -1,0 +1,4 @@
+lint.select = ["Q"]  
+line-length = 88 
+[lint.flake8-quotes]
+inline-quotes = "single"

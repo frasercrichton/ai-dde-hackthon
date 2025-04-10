@@ -1,9 +1,10 @@
 import chromadb
-
+import logging
 
 class RAGDatabase:
     def __init__(self):
         """Initialize the document processor with necessary components."""
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.vector_db = chromadb.Client()
         self.collection = self.vector_db.get_or_create_collection(name='legal_docs')
 

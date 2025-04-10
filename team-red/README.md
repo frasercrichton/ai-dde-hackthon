@@ -47,6 +47,30 @@ deactivate
 
 Run the pdf-processor.ipynb.
 
+## Chroma 
+
+n_results=3 to 5 is generally a safe default for most applications.
+What If My Top n_results Are Not Useful?
+- Increase the embedding quality → Use a better embedding model or fine-tune one.
+- Apply re-ranking → Use a second model to score and reorder the results.
+- Filter results by metadata → If using ChromaDB with metadata, filter based on relevant categories (e.g., category="landmarks").
+- Use hybrid retrieval → Combine keyword-based search with embeddings for better results.
+
+        n_results=3
+        high precision 1-3
+        Works well when information may be spread across multiple short documents.
+- Example: Answering questions that require synthesizing different perspectives, like a summary of multiple research papers.
+
+        more context 3 to 5
+        high recall (broad retrieval for re-ranking) 5 to 10+
+        Recommended when re-ranking or filtering is applied after retrieval.
+- Example: Open-domain Q&A systems where an LLM will decide the most relevant information after fetching multiple candidates.
+
+Here’s the logic for this:
+    •	Lower distances indicate higher similarity (the documents are more relevant).
+    •	Higher distances indicate lower similarity (the documents are less relevant).
+
+
 ### For the future
 
 The RAG database needs small fragments rather than complete documents so that it will work within the token limits. Each fragment needs metadata attached to assist querying. A pipeline that can parse each document, extract metadata and chunk the fragments is required possibly based on this flow:       

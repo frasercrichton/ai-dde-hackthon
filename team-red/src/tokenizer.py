@@ -11,6 +11,13 @@ class Tokenizer:
     def __init__(self, model, token=None):
         kwargs = {'use_auth_token': token} if token else {}
         self.tokenizer = AutoTokenizer.from_pretrained(model, **kwargs)
+        print(self.tokenizer.eos_token)  # should print <|endoftext|>
+
+    def eos_token(self):
+        return self.tokenizer.eos_token
+
+    def eos_token_id(self):
+        return self.tokenizer.eos_token_id
 
     def tokenize(self, text, max_length=None):
         kwargs = {'max_length': max_length} if max_length else {}
@@ -18,5 +25,5 @@ class Tokenizer:
 
         return self.tokenizer(text, **{**defaults, **kwargs})
 
-    def decode(self, outputs):
-        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+    def decode(self, outputs, skip_special_tokens=True):
+        return self.tokenizer.decode(outputs[0], skip_special_tokens)

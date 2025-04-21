@@ -128,9 +128,10 @@ class TestPDFPipeline:
 
         expected_text_without_footnotes = "Summaries. Practitioners can also consult the KGF's\npublications Prosecution of International Crimes Using DDE in National Courts, DDE in UN\nHuman Rights Fact-Finding Missions, and DDE in International Criminal Law for further\ninsight. Available online from the Leiden DDE Database, these companion documents provide"
 
-        text = self.pdf_processor.remove_footnotes(text_with_footnotes)
-        assert text == expected_text_without_footnotes
-
+        metadata = self.pdf_processor.remove_footnotes(text_with_footnotes)
+        assert metadata.get('text') == expected_text_without_footnotes
+        assert len(metadata.get('footnotes')) == 3
+        
     def test_remove_header_prefix(self):
         header = self.pdf_processor.remove_prefix(
             regex=PDFProcessor.HEADER_REGEX, text='F. Audio Recordings'

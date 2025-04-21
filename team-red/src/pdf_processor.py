@@ -71,7 +71,7 @@ class PDFProcessor:
 
     # 6) test_get_leiden_guidelines_sections
     def get_leiden_guidelines_sections(self, pages):
-        
+
         section_pattern = re.compile(r'^([A-Z])\.[^\d].*?(?:\n|$)', re.MULTILINE)
 
         sections = []
@@ -141,16 +141,26 @@ class PDFProcessor:
         return results
 
     def remove_footnotes(self, text):
-        # \n\d+  → Matches a footnote number at the start of a line.
-        # .*? → Captures everything after the number (lazy match).
-        # (?=\n\d+\n|$) → Stops capturing before a new page number (assumed to be on a separate line) or the end of the text.
-        # Flags
-        # re.DOTALL → Allows . to match newlines so the regex captures multi-line footnotes.
 
-        FOOTNOTES = r'\n\d+ .*?(?=\n\d+\n|$)'
+        pattern = r'(?m)^(\d+)\s+(.*?)(?=\n\d+\s|\Z)'
 
-        clean_text = re.sub(FOOTNOTES, '', text, flags=re.DOTALL)
-        return clean_text
+        # Extract footnotes into dict
+        footnotes = {}
+        for match in re.finditer(pattern, text, re.DOTALL):
+            number = int(match.group(1))
+            content = match.group(2).strip()
+            footnotes[number] = content
+
+        # Remove footnotes from the original text
+        clean_text = re.sub(pattern, '', text, flags=re.DOTALL)
+
+        # Final structure
+        result = {
+            'text': clean_text.strip(),
+            'footnotes': footnotes
+        }
+
+        return result
 
     def remove_page_numbers(self, text):
         """

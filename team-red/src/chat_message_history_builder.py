@@ -18,20 +18,32 @@ class ChatMessageHistoryBuilder:
         else:
             raise ValueError(f'Unknown role: {role}')
 
+    def get_recent_messages(self, max_turns: int = 4):
+        return self.history.messages[-max_turns * 2 :]
+
     def build_prompt(self, retrieved_context: str, question: str) -> str:
         chat_prompt_template = ChatPromptTemplate.from_messages(
             [
                 SystemMessage(content=self.system_prompt),
                 MessagesPlaceholder(variable_name='history'),
                 HumanMessage(
-                    content=f'Context:\n{retrieved_context}\n\nQuestion: {question}'
+                    content=f'Document Excerpt:\n{retrieved_context}\n\nQuestion: {question}'
                 ),
             ]
         )
         prompt = chat_prompt_template.invoke(
-            {'history': self.history.messages, 'question': question}
+            {
+                'history': self.get_recent_messages(),
+                'question': question,
+            }
         )
         return self._convert_to_llama_format(prompt.messages)
+
+    format_instruction = """Answer in this exact format:\n"According to the document, [direct answer citing specific requirements]."
+    
+    Direct Answer:
+    """
+       
 
     def _convert_to_llama_format(self, messages: list[BaseMessage]):
         rendered = '<|begin_of_text|>'

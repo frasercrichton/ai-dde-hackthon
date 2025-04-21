@@ -11,12 +11,11 @@ class Tokenizer:
     def __init__(self, model, token=None):
         kwargs = {'use_auth_token': token} if token else {}
         self.tokenizer = AutoTokenizer.from_pretrained(model, **kwargs)
-        print(self.tokenizer.eos_token)  # should print <|endoftext|>
 
     @property
     def eos_token(self):
         return self.tokenizer.eos_token
-    
+
     @property
     def eos_token_id(self):
         return self.tokenizer.eos_token_id

@@ -27,4 +27,5 @@ class Tokenizer:
         return self.tokenizer(text, **{**defaults, **kwargs})
 
     def decode(self, outputs, skip_special_tokens=True):
-        return self.tokenizer.decode(outputs[0], skip_special_tokens)
+        # OLD return self.tokenizer.decode(outputs[0], skip_special_tokens)
+        return self.tokenizer.decode(outputs, skip_special_tokens)

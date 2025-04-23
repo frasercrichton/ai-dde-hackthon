@@ -17,29 +17,33 @@ class TestChatMessageHistoryBuilder:
     def setup_and_teardown(self):
         logger.info('test')
 
-    def test_message_history(self):
+    def test_message_history_user_assistant(self):
 
         chat_message_history_builder = ChatMessageHistoryBuilder()
-        chat_message_history_builder.add_message(
-            'user', 'How is digital evidence authenticated?'
+        chat_message_history_builder.add_user_message(
+            'How is digital evidence authenticated?'
         )
-        chat_message_history_builder.add_message(
-            'assistant',
+        chat_message_history_builder.add_assistant_message(
             "According to the document, it's verified via chain of custody and metadata.",
         )
+        prompt = chat_message_history_builder.build_prompt('The document containing the Leiden Guidelines', 'How is digital evidence authenticated?')
+        print(prompt)
         assert (
-            chat_message_history_builder._convert_to_llama_format()
-            == "<|begin_of_text|><|start_header_id|>user<|end_header_id|>How is digital evidence authenticated?<|eot_id|><|start_header_id|>assistant<|end_header_id|>According to the document, it's verified via chain of custody and metadata.<|eot_id|><|start_header_id|>assistant<|end_header_id|>"
+            prompt
+            == """<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are a helpful legal assistant.<|eot_id|><|start_header_id|>user<|end_header_id|>Question: How is digital evidence authenticated?<|eot_id|><|start_header_id|>assistant<|end_header_id|>According to the document, it's verified via chain of custody and metadata.<|eot_id|><|start_header_id|>user<|end_header_id|>Document Excerpt:
+The document containing the Leiden Guidelines
+
+Question: How is digital evidence authenticated?<|eot_id|><|start_header_id|>assistant<|end_header_id|>"""
         )
 
     def test_message_history(self):
 
         chat_message_history_builder = ChatMessageHistoryBuilder()
-        chat_message_history_builder.add_message(
-            'user', 'How is digital evidence authenticated?'
+
+        chat_message_history_builder.add_user_message(
+            'How is digital evidence authenticated?'
         )
-        chat_message_history_builder.add_message(
-            'assistant',
+        chat_message_history_builder.add_assistant_message(
             "According to the document, it's verified via chain of custody and metadata.",
         )
         prompt = chat_message_history_builder.build_prompt(
@@ -48,7 +52,7 @@ class TestChatMessageHistoryBuilder:
         )
         assert (
             prompt
-            == """<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are a helpful legal assistant.<|eot_id|><|start_header_id|>user<|end_header_id|>How is digital evidence authenticated?<|eot_id|><|start_header_id|>assistant<|end_header_id|>According to the document, it's verified via chain of custody and metadata.<|eot_id|><|start_header_id|>user<|end_header_id|>Context:
+            == """<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are a helpful legal assistant.<|eot_id|><|start_header_id|>user<|end_header_id|>Question: How is digital evidence authenticated?<|eot_id|><|start_header_id|>assistant<|end_header_id|>According to the document, it's verified via chain of custody and metadata.<|eot_id|><|start_header_id|>user<|end_header_id|>Document Excerpt:
 This is a legal document. It contains information about the case XYZ v. ABC. The case was decided in 2020 and is relevant to the current discussion.
 
 Question: How is digital evidence authenticated?<|eot_id|><|start_header_id|>assistant<|end_header_id|>"""

@@ -10,13 +10,11 @@ class ChatMessageHistoryBuilder:
         self.system_prompt = system_prompt
         self.history = ChatMessageHistory()
 
-    def add_message(self, role: str, content: str):
-        if role == 'user':
-            self.history.add_user_message(content)
-        elif role == 'assistant':
-            self.history.add_ai_message(content)
-        else:
-            raise ValueError(f'Unknown role: {role}')
+    def add_user_message(self, question: str):
+        self.history.add_user_message(f'\n\nQuestion: {question}')
+
+    def add_assistant_message(self, answer: str):
+        self.history.add_ai_message(answer)
 
     def get_recent_messages(self, max_turns: int = 4):
         return self.history.messages[-max_turns * 2 :]
@@ -43,7 +41,6 @@ class ChatMessageHistoryBuilder:
     
     Direct Answer:
     """
-       
 
     def _convert_to_llama_format(self, messages: list[BaseMessage]):
         rendered = '<|begin_of_text|>'

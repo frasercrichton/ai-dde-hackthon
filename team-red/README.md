@@ -97,3 +97,13 @@ This could be augmented with some example questions and some kind of editor for 
 # TODOS and Improvements
 
 - extract code from Jupyter Note books and create a Python application that can be run as a pipeline 
+
+1) Using more diverse training data: By exposing the model to a wider range of inputs during training (e.g., different types of documents), it can learn how to produce less repetitive output.
+
+2) Fine-tuning the model with additional datasets: This involves retraining the existing model using new examples specifically designed to address common errors such as repetition or incorrect spellings.
+
+3) Implementing regularization techniques: These methods aim at penalizing models which generate similar outputs repeatedly by adding constraints like dropout layers or noise injection into their architecture.
+
+4) Utilize beam search decoding algorithms: Instead of selecting just one candidate sentence per step while generating predictions, multiple candidates are generated simultaneously allowing us to choose among them based upon certain criteria e.g., diversity score etc..
+
+5) Employing post-processing steps after generation: After producing final results we might apply further corrections through tools like grammar checkers or human review before publishing them publicly online.

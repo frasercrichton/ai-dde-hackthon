@@ -19,14 +19,19 @@ class TestChatMessageHistoryBuilder:
 
     def test_message_history_user_assistant(self):
 
-        chat_message_history_builder = ChatMessageHistoryBuilder()
+        chat_message_history_builder = ChatMessageHistoryBuilder(
+            'You are a helpful legal assistant.'
+        )
         chat_message_history_builder.add_user_message(
             'How is digital evidence authenticated?'
         )
         chat_message_history_builder.add_assistant_message(
             "According to the document, it's verified via chain of custody and metadata.",
         )
-        prompt = chat_message_history_builder.build_prompt('The document containing the Leiden Guidelines', 'How is digital evidence authenticated?')
+        prompt = chat_message_history_builder.build_prompt(
+            'The document containing the Leiden Guidelines',
+            'How is digital evidence authenticated?',
+        )
         print(prompt)
         assert (
             prompt
@@ -38,7 +43,9 @@ Question: How is digital evidence authenticated?<|eot_id|><|start_header_id|>ass
 
     def test_message_history(self):
 
-        chat_message_history_builder = ChatMessageHistoryBuilder()
+        chat_message_history_builder = ChatMessageHistoryBuilder(
+            'You are a helpful legal assistant.'
+        )
 
         chat_message_history_builder.add_user_message(
             'How is digital evidence authenticated?'

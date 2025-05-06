@@ -42,12 +42,12 @@ class TestPDFPipeline:
 
     def test_exclude_cover_page(self):
         pages_array = ['cover', 'table of contents', 'introduction']
-        pages = self.pdf_processor.exclude_cover_page(pages_array)
+        pages = self.pdf_processor.remove_cover_page(pages_array)
         assert pages == ['table of contents', 'introduction']
 
     def test_exclude_table_of_contents(self):
         pages_array = ['table of contents', 'introduction with space ']
-        pages = self.pdf_processor.exclude_table_of_contents(pages_array)
+        pages = self.pdf_processor.remove_table_of_contents(pages_array)
         assert pages == ['introduction with space '], f' seems wrong {pages}'
 
     def test_get_leiden_guidelines(self):
@@ -57,7 +57,7 @@ class TestPDFPipeline:
             'II. The Leiden Guidelines \n text',
             'A.2. A video and its associated transcripts and translations must be seen as forming integral parts of the same evidence.',
         ]
-        pages = self.pdf_processor.get_leiden_guidelines(pages_array)
+        pages = self.pdf_processor.get_guidelines(pages_array)
 
         assert pages == [
             'II. The Leiden Guidelines \n text',
@@ -67,9 +67,9 @@ class TestPDFPipeline:
     def test_get_leiden_guidelines_sections(self):
         shortened_pages = [page[:200] for page in self.single_pages]
 
-        pages = self.pdf_processor.get_leiden_guidelines_sections(shortened_pages)
+        pages = self.pdf_processor.get_top_level_sections(shortened_pages)
         print(shortened_pages)
-        section_headers = [section.get('section', '') for section in pages]
+        section_headers = [section.get('section_title', '') for section in pages]
         section_text = [section.get('text', '') for section in pages]
         assert section_headers == [
             'A. Videos',
@@ -103,10 +103,10 @@ class TestPDFPipeline:
     #         None,
     #     ]
 
-        # matches = re.findall(r'\bA\.\d+\.', section_text[0])
-        # assert matches == ["A.4.", "A.6.", "A.7."], (
-        #     "Some A.x. sections are missing or extra ones exist!"
-        # )
+    # matches = re.findall(r'\bA\.\d+\.', section_text[0])
+    # assert matches == ["A.4.", "A.6.", "A.7."], (
+    #     "Some A.x. sections are missing or extra ones exist!"
+    # )
 
     # *****
 
@@ -122,16 +122,16 @@ class TestPDFPipeline:
             == 'Criminal Court (Human Rights Center, UC Berkeley School of Law 2014) fn 2, citing Stephen\nMason, International Electronic Evidence (British Institute of International and Comparative Law 2008).'
         )
 
-    def test_remove_footnotes(self):
+    def test_extract_footnotes(self):
 
         text_with_footnotes = "Summaries. Practitioners can also consult the KGF's\npublications Prosecution of International Crimes Using DDE in National Courts, DDE in UN\nHuman Rights Fact-Finding Missions, and DDE in International Criminal Law for further\ninsight. Available online from the Leiden DDE Database, these companion documents provide\n2 Braga Da Silva, R., Updating the Authentication of Digital Evidence in the International Criminal Court,\nInternational Criminal Law Review 1-24 (2021) [2].\n3 International Bar Association, Evidence Matters in ICC Trials (August 2016) 19.\n4 Alexa Koenig and others, Digital Fingerprints: Using Electronic Evidence to Advance Prosecutions at the\nInternational Criminal Court (Human Rights Center, UC Berkeley School of Law 2014) fn 2, citing Stephen\nMason, International Electronic Evidence (British Institute of International and Comparative Law 2008)."
 
         expected_text_without_footnotes = "Summaries. Practitioners can also consult the KGF's\npublications Prosecution of International Crimes Using DDE in National Courts, DDE in UN\nHuman Rights Fact-Finding Missions, and DDE in International Criminal Law for further\ninsight. Available online from the Leiden DDE Database, these companion documents provide"
 
-        metadata = self.pdf_processor.remove_footnotes(text_with_footnotes)
+        metadata = self.pdf_processor.extract_footnotes(text_with_footnotes)
         assert metadata.get('text') == expected_text_without_footnotes
         assert len(metadata.get('footnotes')) == 3
-        
+
     def test_remove_header_prefix(self):
         header = self.pdf_processor.remove_prefix(
             regex=PDFProcessor.HEADER_REGEX, text='F. Audio Recordings'
@@ -147,3 +147,10 @@ class TestPDFPipeline:
             header
             == 'Insufficient authentication goes to the weight of audio recordings rather than their admissibility.'
         )
+
+    def test_get_keywords(self):
+        keywords = self.pdf_processor.get_keywords(
+            'Keywords: relevance; probative value; transcription\nPursuant to Rule 89(C) of the ICTY Rules of Proc'
+        )
+
+        assert keywords == {'keywords': ['relevance', 'probative value', 'transcription']}

@@ -6,7 +6,7 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, Base
 
 class ChatMessageHistoryBuilder:
 
-    def __init__(self, system_prompt: str = 'You are a helpful legal assistant.'):
+    def __init__(self, system_prompt: str):
         self.system_prompt = system_prompt
         self.history = ChatMessageHistory()
 

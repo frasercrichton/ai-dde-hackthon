@@ -1,3 +1,4 @@
+from ast import keyword
 import pdfplumber
 import re
 
@@ -22,7 +23,7 @@ class PDFProcessor:
         return pages
 
     # 2) exclude the cover
-    def exclude_cover_page(self, pages_array):
+    def remove_cover_page(self, pages_array):
         filtered_pages = []
 
         for page_number, text in enumerate(pages_array):
@@ -32,7 +33,7 @@ class PDFProcessor:
         return filtered_pages
 
     # 3) exclude table of contents
-    def exclude_table_of_contents(self, pages_array):
+    def remove_table_of_contents(self, pages_array):
         filtered_pages = []
         # TODO should really check for format
         for page_number, text in enumerate(pages_array):
@@ -42,7 +43,7 @@ class PDFProcessor:
         return filtered_pages
 
     # 4) get Leiden Guidelines
-    def get_leiden_guidelines(self, pages):
+    def get_guidelines(self, pages):
         # II. The Leiden Guidelines
         # •	^ → Matches the start of the string (optional, remove if matching anywhere).
         # •	II → Matches the literal “II”.
@@ -70,7 +71,7 @@ class PDFProcessor:
         return result
 
     # 6) test_get_leiden_guidelines_sections
-    def get_leiden_guidelines_sections(self, pages):
+    def get_top_level_sections(self, pages):
 
         section_pattern = re.compile(r'^([A-Z])\.[^\d].*?(?:\n|$)', re.MULTILINE)
 
@@ -90,7 +91,12 @@ class PDFProcessor:
                     section_text = page[
                         match.end() :
                     ].strip()  # Capture ALL text after the title
-                    current_section = {'section': section_title, 'text': section_text}
+                    current_section = {
+                        'section_title': self.remove_prefix(
+                            regex=PDFProcessor.HEADER_REGEX, text=section_title
+                        ),
+                        'text': section_text,
+                    }
             else:
                 # Append additional text to the current section
                 if current_section:
@@ -103,19 +109,19 @@ class PDFProcessor:
         return sections
 
     # 7) test_get_leiden_guidelines_sub_sections
-    def extract_subsections(self, grouped_data):
+    def get_subsections(self, grouped_data):
         subsection_pattern = r'(?P<subheader>[A-Z]\.\d+\.\s.*?\.)'  # Refined pattern
         results = []
 
         for group in grouped_data:
-            header = group['section']
+            header = group['section_title']
             text = group['text']
 
             subsections = []
             last_pos = 0
 
             matches = list(re.finditer(subsection_pattern, text, re.DOTALL))
-            print(f'matches {matches}')
+            # print(f'matches {matches}')
             for idx, match in enumerate(matches):
                 subheader = match.group('subheader').strip()
                 start_idx = match.end()
@@ -126,7 +132,14 @@ class PDFProcessor:
                     else text[start_idx:].strip()
                 )
 
-                subsections.append({'subheader': subheader, 'text': subsection_text})
+                subsections.append(
+                    {
+                        'subheader': self.remove_prefix(
+                            regex=PDFProcessor.SUBHEADER_REGEX, text=subheader
+                        ),
+                        'text': subsection_text,
+                    }
+                )
                 last_pos = match.end()
 
             # Handle any remaining text that does not belong to a subsection
@@ -140,7 +153,7 @@ class PDFProcessor:
 
         return results
 
-    def remove_footnotes(self, text):
+    def extract_footnotes(self, text):
 
         pattern = r'(?m)^(\d+)\s+(.*?)(?=\n\d+\s|\Z)'
 
@@ -155,10 +168,7 @@ class PDFProcessor:
         clean_text = re.sub(pattern, '', text, flags=re.DOTALL)
 
         # Final structure
-        result = {
-            'text': clean_text.strip(),
-            'footnotes': footnotes
-        }
+        result = {'text': clean_text.strip(), 'footnotes': footnotes}
 
         return result
 
@@ -178,6 +188,13 @@ class PDFProcessor:
         # # r"^\s*\d+\s*$"
         # clean_text = re.sub(extrapolations_pattern, '', text, flags=re.MULTILINE)
         # return re.sub(dangling_page_number, '', clean_text, flags=re.MULTILINE)
+
+    def get_keywords(self, text):
+        keyword_block = re.sub(r'^Keywords\s*(?:\n|$)', '', text)
+       
+        print(keyword_block)
+        keywords = keyword_block.split(';')
+        return {'keywords': keywords}
 
     def remove_prefix(self, regex, text):
         if text is not None:

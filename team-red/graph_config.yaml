@@ -1,0 +1,28 @@
+nodes:
+  - name: retriever
+    type: retriever
+
+  - name: generator
+    type: llm
+    model: meta-llama/Llama-3.1-8B
+
+  - name: verifier
+    type: llm
+    model: microsoft/phi-2
+
+  - name: audience_adjuster
+    type: llm
+    model: meta-llama/Llama-3.1-8B
+
+edges:
+  - from: retriever
+    to: generator
+
+  - from: generator
+    to: verifier
+
+  - from: verifier
+    to: audience_adjuster
+
+  - from: audience_adjuster
+    to: END

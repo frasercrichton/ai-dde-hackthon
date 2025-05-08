@@ -1,7 +1,9 @@
 import chromadb
 import logging
 
-class RAGDatabase:
+class VectorDatabase:
+
+    
     def __init__(self):
         """Initialize the document processor with necessary components."""
         self.logger = logging.getLogger(self.__class__.__name__)

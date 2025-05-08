@@ -57,3 +57,6 @@ class ChatMessageHistoryBuilder:
             )
         rendered += '<|start_header_id|>assistant<|end_header_id|>'
         return rendered
+
+# tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
+# tokenizer.chat_template = "{% for message in messages %}{{'<|start_header_id|>' + message['role'] + '<|end_header_id|>\n\n' + message['content'] + '<|eot_id|>'}}{% endfor %}"

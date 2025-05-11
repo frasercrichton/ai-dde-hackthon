@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 class DocumentParser:
 
-    def format_documents_for_chroma(self, documents):
+    def preprocess_documents_for_chroma(self, documents):
         formatted = []
         for doc in documents:
             metadata = doc.get('metadata', {})
@@ -23,7 +23,7 @@ class DocumentParser:
             )
         return formatted
 
-    def parse_for_chroma(self, documents, embeddings_processor):
+    def create_embedded_documents(self, documents, embeddings_processor):
         logger.info(f'parsing {len(documents)} documents.')
         # update this to make these unique
         return [

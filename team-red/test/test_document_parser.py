@@ -15,7 +15,7 @@ class TestDocumentParser:
     def setup_and_teardown(self):
         logger.info('test')
 
-    def test_create_headers(self):
+    def test_preprocess_documents_for_chroma(self):
         document_parser = DocumentParser()
 
         leiden_documents = [
@@ -31,7 +31,7 @@ class TestDocumentParser:
             }
         ]
 
-        formatted_documents = document_parser.format_documents_for_chroma(
+        formatted_documents = document_parser.preprocess_documents_for_chroma(
             leiden_documents
         )
         print(formatted_documents)

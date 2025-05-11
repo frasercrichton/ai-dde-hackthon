@@ -34,3 +34,19 @@ class DocumentParser:
             }
             for i, document in enumerate(documents)
         ]
+
+
+
+# class DocumentParser:
+
+#   def parse_for_chroma(self, documents):
+#     logger.info(f'parsing {len(documents)} documents.')
+#     # update thsi to make these unique
+#     return [
+#         {
+#             **document,
+#             'id': f"{document.get('metadata').get('text')}-{str(i)}",
+#             'embedding': embeddings_processor.create_embeddings(document['text'])
+#         }
+#         for i, document in enumerate(documents)
+#     ]
